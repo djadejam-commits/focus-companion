@@ -28,7 +28,7 @@
 4. **Create Repository**
    - Click the green **"Create repository"** button
    - You'll see instructions for pushing existing repository
-   - **Copy the repository URL** (will be like: `https://github.com/YOUR_USERNAME/focus-companion.git`)
+   - **Copy the repository URL** (will be like: `https://github.com/djadejam-commits/focus-companion.git`)
 
 ---
 
@@ -37,8 +37,8 @@
 Run these commands in your terminal (in the project folder):
 
 ```bash
-# Add GitHub as remote (replace YOUR_USERNAME with your actual GitHub username)
-git remote add origin https://github.com/YOUR_USERNAME/focus-companion.git
+# Add GitHub as remote (replace djadejam-commits with your actual GitHub username)
+git remote add origin https://github.com/djadejam-commits/focus-companion.git
 
 # Verify remote was added
 git remote -v
@@ -69,7 +69,7 @@ gh repo create focus-companion --public --source=. --remote=origin --push
 ## Step 3: Verify Upload
 
 1. **Go to your repository**
-   - URL: `https://github.com/YOUR_USERNAME/focus-companion`
+   - URL: `https://github.com/djadejam-commits/focus-companion`
 
 2. **Check that these files are visible:**
    - ✅ README.md (should display nicely on main page)
@@ -105,7 +105,7 @@ On your GitHub repository page:
 
 Your repository URL will be:
 ```
-https://github.com/YOUR_USERNAME/focus-companion
+https://github.com/djadejam-commits/focus-companion
 ```
 
 **Save this URL** - you'll need it for:
@@ -154,7 +154,7 @@ git log --oneline
 git remote -v
 
 # Add GitHub remote
-git remote add origin https://github.com/YOUR_USERNAME/focus-companion.git
+git remote add origin https://github.com/djadejam-commits/focus-companion.git
 
 # Push to GitHub
 git push -u origin main

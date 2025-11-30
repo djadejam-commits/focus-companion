@@ -33,10 +33,10 @@
 4. Copy repo URL
 5. Run:
    ```bash
-   git remote add origin https://github.com/YOUR_USERNAME/focus-companion.git
+   git remote add origin https://github.com/djadejam-commits/focus-companion.git
    git push -u origin main
    ```
-6. Verify at: `https://github.com/YOUR_USERNAME/focus-companion`
+6. Verify at: `https://github.com/djadejam-commits/focus-companion`
 7. **Save the URL** for submission form
 
 **✅ Success check**: README displays nicely on GitHub
@@ -78,7 +78,7 @@
 4. Scroll to **"Project visibility"**
 5. Click **"Make project public"**
 6. Confirm
-7. Copy public URL: `https://studio.edgeimpulse.com/public/XXXXX/latest`
+7. Copy public URL: `https://studio.edgeimpulse.com/public/840291/live`
 8. **Test in incognito mode** to verify it's viewable
 9. **Save the URL** for submission form
 
@@ -101,9 +101,9 @@
 3. Fill out form:
    - **Project Name**: Focus Companion
    - **Tagline**: AI-powered study companion detecting phone pickups with Edge Impulse
-   - **GitHub URL**: `https://github.com/YOUR_USERNAME/focus-companion`
-   - **Demo Video**: `https://youtube.com/watch?v=XXXXX`
-   - **Edge Impulse Project**: `https://studio.edgeimpulse.com/public/XXXXX/latest`
+   - **GitHub URL**: `https://github.com/djadejam-commits/focus-companion`
+   - **Demo Video**: `https://youtu.be/yK8pSpx8uO4`
+   - **Edge Impulse Project**: `https://studio.edgeimpulse.com/public/840291/live`
    - **Description**: (see SUBMISSION_CHECKLIST.md for template)
 4. Add tags: machine-learning, edge-ai, react-native, education
 5. Review all links work
@@ -143,9 +143,9 @@
 
 By the end, you'll have 3 URLs to submit:
 
-1. **GitHub**: `https://github.com/YOUR_USERNAME/focus-companion`
-2. **YouTube**: `https://youtube.com/watch?v=XXXXX`
-3. **Edge Impulse**: `https://studio.edgeimpulse.com/public/XXXXX/latest`
+1. **GitHub**: `https://github.com/djadejam-commits/focus-companion`
+2. **YouTube**: `https://youtu.be/yK8pSpx8uO4`
+3. **Edge Impulse**: `https://studio.edgeimpulse.com/public/840291/live`
 
 **Pro tip**: Create a Google Doc with all 3 links so you can copy-paste into submission form
 

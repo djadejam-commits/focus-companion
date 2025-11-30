@@ -3,7 +3,7 @@
 ## 2-Minute Judge Pitch
 
 ### Opening (15 seconds)
-"Hi, I'm [Your Name] and I built **Focus Companion** - an AI-powered study app that helps students stay focused by detecting when they impulsively pick up their phone."
+"Hi, I'm Adeoluwa Tokuta and I built **Focus Companion** - an AI-powered study app that helps students stay focused by detecting when they impulsively pick up their phone."
 
 **Show**: Dashboard screen on phone
 

@@ -69,7 +69,7 @@ Per competition rules, you must submit:
 - [ ] Scroll to **"Project visibility"** section
 - [ ] Click **"Make project public"**
 - [ ] Confirm the action
-- [ ] Copy the public project URL (will be something like: `https://studio.edgeimpulse.com/public/XXXXX/latest`)
+- [ ] Copy the public project URL (will be something like: `https://studio.edgeimpulse.com/public/840291/live`)
 - [ ] Verify the link opens in an incognito/private browser window
 - [ ] Save URL for submission form
 
@@ -229,7 +229,7 @@ gh repo create focus-companion --public --source=. --remote=origin --description
 
 ```bash
 # Add GitHub remote
-git remote add origin https://github.com/YOUR_USERNAME/focus-companion.git
+git remote add origin https://github.com/djadejam-commits/focus-companion.git
 
 # Verify remote
 git remote -v
@@ -239,7 +239,7 @@ git branch -M main
 git push -u origin main
 
 # Verify upload
-# Visit: https://github.com/YOUR_USERNAME/focus-companion
+# Visit: https://github.com/djadejam-commits/focus-companion
 ```
 
 ### 3E: Verify Repository
@@ -273,9 +273,9 @@ On GitHub repository page:
 2. **Fill Out Submission Form**
    - **Project Name**: Focus Companion
    - **Tagline**: AI-powered study companion that detects phone pickups using Edge Impulse
-   - **GitHub Repository URL**: `https://github.com/YOUR_USERNAME/focus-companion`
-   - **Demo Video URL**: `https://youtube.com/watch?v=XXXXX` (from Step 1)
-   - **Edge Impulse Project URL**: `https://studio.edgeimpulse.com/public/XXXXX/latest` (from Step 2)
+   - **GitHub Repository URL**: `https://github.com/djadejam-commits/focus-companion`
+   - **Demo Video URL**: `https://youtu.be/yK8pSpx8uO4` (from Step 1)
+   - **Edge Impulse Project URL**: `https://studio.edgeimpulse.com/public/840291/live` (from Step 2)
    - **Description**: (Copy from README introduction or write custom)
 
 3. **Description Template** (if needed):

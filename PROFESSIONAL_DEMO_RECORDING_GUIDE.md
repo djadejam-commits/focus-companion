@@ -68,7 +68,7 @@
 - Show Dashboard screen, calm and steady
 
 **VOICEOVER (Read naturally)**:
-> "Hi, I'm [Your Name], and I built **Focus Companion** - an AI-powered mobile app that helps students stay focused during study sessions by detecting when they unconsciously pick up their phone using Edge Impulse machine learning."
+> "Hi, I'm Adeoluwa Tokuta, and I built **Focus Companion** - an AI-powered mobile app that helps students stay focused during study sessions by detecting when they unconsciously pick up their phone using Edge Impulse machine learning."
 
 **CAMERA**:
 - Hold iPhone steady on Dashboard
@@ -409,7 +409,7 @@ Focus Companion is an AI-powered mobile app that helps students stay focused dur
 - Make it visually appealing!
 
 5. **Click "Publish"**
-6. **Copy video URL** (e.g., `https://youtube.com/watch?v=XXXXX`)
+6. **Copy video URL** (e.g., `https://youtu.be/yK8pSpx8uO4`)
 7. **Save URL** for HackerEarth submission
 
 ---

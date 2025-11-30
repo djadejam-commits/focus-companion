@@ -15,7 +15,7 @@
 - Clean background, good lighting
 
 **Script**:
-> "Students lose 2.5 hours every day to unconscious phone pickups during study sessions. What if your phone could detect the exact moment you pick it up—and gently remind you to stay focused? I'm [Your Name], and I built Focus Companion using Edge Impulse to solve this problem."
+> "Students lose 2.5 hours every day to unconscious phone pickups during study sessions. What if your phone could detect the exact moment you pick it up—and gently remind you to stay focused? I'm Adeoluwa Tokuta, and I built Focus Companion using Edge Impulse to solve this problem."
 
 **Alternative (screen only)**:
 > Start with phone on desk, show the app dashboard

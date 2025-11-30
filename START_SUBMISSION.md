@@ -43,10 +43,10 @@
 # 2. Copy your repo URL
 # 3. Run these commands:
 
-git remote add origin https://github.com/YOUR_USERNAME/focus-companion.git
+git remote add origin https://github.com/djadejam-commits/focus-companion.git
 git push -u origin main
 
-# 4. Verify: Visit https://github.com/YOUR_USERNAME/focus-companion
+# 4. Verify: Visit https://github.com/djadejam-commits/focus-companion
 # 5. Save URL for submission
 ```
 
@@ -86,9 +86,9 @@ git push -u origin main
 1. Go to https://www.hackerearth.com/edge-impulse
 2. Click Submit
 3. Fill form with your 3 URLs:
-   - GitHub: `https://github.com/YOUR_USERNAME/focus-companion`
-   - Video: `https://youtube.com/watch?v=XXXXX`
-   - Edge Impulse: `https://studio.edgeimpulse.com/public/XXXXX/latest`
+   - GitHub: `https://github.com/djadejam-commits/focus-companion`
+   - Video: `https://youtu.be/yK8pSpx8uO4`
+   - Edge Impulse: `https://studio.edgeimpulse.com/public/840291/live`
 4. Submit
 5. Screenshot confirmation
 
