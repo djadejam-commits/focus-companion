@@ -13,8 +13,8 @@ const RefocusScreen = ({ sessionType }) => {
   const breatheAnim = useState(new Animated.Value(1))[0];
   const pulseAnim = useState(new Animated.Value(1))[0];
 
-  // Get varied message with random emoji each time
-  const refocusContent = getRefocusMessage(sessionType.id);
+  // Get varied message with random emoji - only once on mount (not on every render)
+  const [refocusContent] = useState(() => getRefocusMessage(sessionType.id));
 
   const handleDismiss = () => {
     // User rejected this as false positive - decrement counter and resume
