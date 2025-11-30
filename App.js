@@ -9,6 +9,7 @@ import DashboardScreen from './src/screens/DashboardScreen';
 import ActiveSessionScreen from './src/screens/ActiveSessionScreen';
 import SummaryScreen from './src/screens/SummaryScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
+import HelpScreen from './src/screens/HelpScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +39,10 @@ export default function App() {
           <Stack.Screen
             name="History"
             component={HistoryScreen}
+          />
+          <Stack.Screen
+            name="Help"
+            component={HelpScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

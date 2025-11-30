@@ -74,8 +74,25 @@ const DashboardScreen = ({ navigation }) => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>Focus Companion</Text>
-          <Text style={styles.subtitle}>Ready to study?</Text>
+          <View style={styles.headerContent}>
+            <View>
+              <Text style={styles.title}>Focus Companion</Text>
+              <Text style={styles.subtitle}>Ready to study?</Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                navigation.navigate('Help');
+              }}
+              style={styles.helpButton}
+              accessible={true}
+              accessibilityLabel="Help and usage guide"
+              accessibilityHint="Double tap to learn how to use Focus Companion"
+              accessibilityRole="button"
+            >
+              <Text style={styles.helpButtonText}>?</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Session Type Cards */}
@@ -179,6 +196,29 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: 32
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start'
+  },
+  helpButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#6366F1',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#6366F1',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 3
+  },
+  helpButtonText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFFFFF'
   },
   title: {
     fontSize: 32,
