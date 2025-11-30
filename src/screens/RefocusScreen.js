@@ -13,7 +13,8 @@ const RefocusScreen = ({ sessionType }) => {
   const breatheAnim = useState(new Animated.Value(1))[0];
   const pulseAnim = useState(new Animated.Value(1))[0];
 
-  const message = getRefocusMessage(sessionType.id);
+  // Get varied message with random emoji each time
+  const refocusContent = getRefocusMessage(sessionType.id);
 
   const handleDismiss = () => {
     // User rejected this as false positive - decrement counter and resume
@@ -99,19 +100,19 @@ const RefocusScreen = ({ sessionType }) => {
             }
           ]}
         >
-          {/* Icon with breathing animation */}
+          {/* Icon with breathing animation - varied emoji each time */}
           <Animated.Text
             style={[
               styles.icon,
               { transform: [{ scale: breatheAnim }] }
             ]}
           >
-            🌊
+            {refocusContent.emoji}
           </Animated.Text>
 
-          {/* Message */}
-          <Text style={styles.title}>Breathe & Refocus</Text>
-          <Text style={styles.message}>{message}</Text>
+          {/* Dynamic title and message */}
+          <Text style={styles.title}>{refocusContent.title}</Text>
+          <Text style={styles.message}>{refocusContent.message}</Text>
 
           {/* Countdown with pulse animation */}
           {countdown > 0 && (

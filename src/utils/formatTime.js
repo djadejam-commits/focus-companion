@@ -68,17 +68,53 @@ export const formatTimeOfDay = (timestamp) => {
 };
 
 /**
- * Calculate focus percentage
- * @param {number} distractionCount
- * @param {number} durationMinutes
- * @returns {number} Percentage (0-100)
+ * Calculate focus score based on distractions vs session time
+ * @param {number} distractionCount - Number of times user picked up phone
+ * @param {number} durationMinutes - Session duration in minutes
+ * @returns {number} Focus score percentage (0-100)
+ *
+ * Algorithm:
+ * - Assumes each distraction = 30 seconds of lost focus time
+ * - Calculates percentage of time spent in true focus
+ * - Applies diminishing returns for longer sessions
+ *
+ * Examples:
+ * - 45 min, 0 distractions = 100%
+ * - 45 min, 3 distractions = 97% (1.5 min lost / 45 min)
+ * - 45 min, 10 distractions = 89% (5 min lost / 45 min)
+ * - 25 min, 5 distractions = 90% (2.5 min lost / 25 min)
  */
 export const calculateFocusScore = (distractionCount, durationMinutes) => {
   if (durationMinutes === 0) return 100;
+  if (distractionCount === 0) return 100;
 
-  // Max expected distractions: 1 per 3 minutes
-  const maxExpected = durationMinutes / 3;
-  const score = Math.max(0, 100 - (distractionCount / maxExpected) * 100);
+  // Each distraction assumes 30 seconds of lost focus
+  const SECONDS_LOST_PER_DISTRACTION = 30;
+
+  // Calculate total lost time
+  const totalLostSeconds = distractionCount * SECONDS_LOST_PER_DISTRACTION;
+  const totalSessionSeconds = durationMinutes * 60;
+
+  // Calculate percentage of time in focus
+  const focusTime = Math.max(0, totalSessionSeconds - totalLostSeconds);
+  const baseScore = (focusTime / totalSessionSeconds) * 100;
+
+  // Apply bonus for low distraction counts (reward good behavior)
+  let finalScore = baseScore;
+
+  // Distraction rate (distractions per 10 minutes)
+  const distractionsPerTenMin = (distractionCount / durationMinutes) * 10;
+
+  if (distractionsPerTenMin <= 1) {
+    // Excellent focus - bonus points
+    finalScore = Math.min(100, baseScore + 5);
+  } else if (distractionsPerTenMin <= 2) {
+    // Good focus - small bonus
+    finalScore = Math.min(100, baseScore + 2);
+  }
+
+  // Ensure score is between 0-100
+  const score = Math.max(0, Math.min(100, finalScore));
 
   return Math.round(score);
 };

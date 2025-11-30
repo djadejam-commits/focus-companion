@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
+import * as Haptics from 'expo-haptics';
 import { useSession, SESSION_STATE } from '../context/SessionContext';
 import { formatTime } from '../utils/formatTime';
 import MotionService from '../services/MotionService';
@@ -23,6 +24,11 @@ const ActiveSessionScreen = ({ route, navigation }) => {
 
   const timerRef = useRef(null);
   const [isMotionActive, setIsMotionActive] = useState(false);
+
+  // Animation values
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const flashAnim = useRef(new Animated.Value(0)).current;
+  const progressAnim = useRef(new Animated.Value(0)).current;
 
   // Initialize session
   useEffect(() => {
@@ -84,21 +90,77 @@ const ActiveSessionScreen = ({ route, navigation }) => {
   useEffect(() => {
     if (state === SESSION_STATE.COMPLETE) {
       MotionService.stop();
+      // Success haptic for completion
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       navigation.replace('Summary');
     }
   }, [state, navigation]);
 
+  // Pulsing animation for detection indicator
+  useEffect(() => {
+    if (isMotionActive) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, {
+            toValue: 1.3,
+            duration: 1000,
+            useNativeDriver: true
+          }),
+          Animated.timing(pulseAnim, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true
+          })
+        ])
+      ).start();
+    }
+  }, [isMotionActive]);
+
+  // Flash animation when detection occurs
+  useEffect(() => {
+    if (state === SESSION_STATE.REFOCUS) {
+      // Haptic feedback for detection
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+
+      Animated.sequence([
+        Animated.timing(flashAnim, {
+          toValue: 0.3,
+          duration: 100,
+          useNativeDriver: true
+        }),
+        Animated.timing(flashAnim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true
+        })
+      ]).start();
+    }
+  }, [state]);
+
+  // Smooth progress animation
+  useEffect(() => {
+    const progress = 1 - (remainingTime / sessionType.duration);
+    Animated.timing(progressAnim, {
+      toValue: progress,
+      duration: 500,
+      useNativeDriver: false
+    }).start();
+  }, [remainingTime, sessionType.duration]);
+
   const handlePause = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     pauseSession();
     MotionService.stop();
   };
 
   const handleResume = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     resumeSession();
     MotionService.start();
   };
 
   const handleEndEarly = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     Alert.alert(
       'End Session Early?',
       'Are you sure you want to end this session?',
@@ -108,6 +170,7 @@ const ActiveSessionScreen = ({ route, navigation }) => {
           text: 'End Session',
           style: 'destructive',
           onPress: () => {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
             MotionService.stop();
             endSessionEarly();
           }
@@ -125,6 +188,15 @@ const ActiveSessionScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Flash overlay for detection */}
+      <Animated.View
+        style={[
+          styles.flashOverlay,
+          { opacity: flashAnim }
+        ]}
+        pointerEvents="none"
+      />
+
       <View style={styles.content}>
         {/* Header */}
         <View style={styles.header}>
@@ -137,14 +209,45 @@ const ActiveSessionScreen = ({ route, navigation }) => {
           </View>
         </View>
 
-        {/* Timer Display */}
+        {/* Timer Display with Circular Progress */}
         <View style={styles.timerContainer}>
-          <Text style={styles.timerText}>{formatTime(remainingTime)}</Text>
+          {/* Circular progress ring */}
+          <View style={styles.circularProgressContainer}>
+            <Animated.View style={[
+              styles.circularProgress,
+              {
+                transform: [{
+                  rotate: progressAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['0deg', '360deg']
+                  })
+                }]
+              }
+            ]}>
+              <View style={styles.circularProgressBar} />
+            </Animated.View>
+            <View style={styles.circularProgressInner}>
+              <Text style={styles.timerText}>{formatTime(remainingTime)}</Text>
+              <Text style={styles.progressPercent}>
+                {Math.round((1 - (remainingTime / sessionType.duration)) * 100)}%
+              </Text>
+            </View>
+          </View>
         </View>
 
         {/* Progress Bar */}
         <View style={styles.progressBarContainer}>
-          <View style={[styles.progressBar, { width: `${progress * 100}%` }]} />
+          <Animated.View
+            style={[
+              styles.progressBar,
+              {
+                width: progressAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['0%', '100%']
+                })
+              }
+            ]}
+          />
         </View>
 
         {/* Distraction Counter */}
@@ -158,8 +261,15 @@ const ActiveSessionScreen = ({ route, navigation }) => {
         {/* Motion Status Indicator */}
         {isMotionActive && (
           <View style={styles.motionStatus}>
-            <View style={styles.motionIndicator} />
-            <Text style={styles.motionText}>Detection active</Text>
+            <Animated.View
+              style={[
+                styles.motionIndicator,
+                {
+                  transform: [{ scale: pulseAnim }]
+                }
+              ]}
+            />
+            <Text style={styles.motionText}>🤖 AI Detection Active</Text>
           </View>
         )}
 
@@ -191,6 +301,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F9FAFB'
+  },
+  flashOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#EF4444',
+    zIndex: 999
   },
   content: {
     flex: 1,
@@ -230,11 +349,53 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 32
   },
+  circularProgressContainer: {
+    width: 280,
+    height: 280,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  circularProgress: {
+    position: 'absolute',
+    width: 280,
+    height: 280,
+    borderRadius: 140,
+    borderWidth: 8,
+    borderColor: '#E5E7EB'
+  },
+  circularProgressBar: {
+    position: 'absolute',
+    width: '50%',
+    height: '100%',
+    borderTopRightRadius: 140,
+    borderBottomRightRadius: 140,
+    backgroundColor: '#6366F1',
+    right: 0
+  },
+  circularProgressInner: {
+    width: 240,
+    height: 240,
+    borderRadius: 120,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 8
+  },
   timerText: {
-    fontSize: 72,
+    fontSize: 56,
     fontWeight: 'bold',
     color: '#111827',
     fontVariant: ['tabular-nums']
+  },
+  progressPercent: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#6366F1',
+    marginTop: 4
   },
   progressBarContainer: {
     height: 8,
@@ -266,18 +427,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 32
+    marginBottom: 32,
+    backgroundColor: '#ECFDF5',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: '#10B981'
   },
   motionIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     backgroundColor: '#10B981',
-    marginRight: 8
+    marginRight: 10,
+    shadowColor: '#10B981',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+    elevation: 4
   },
   motionText: {
     fontSize: 14,
-    color: '#6B7280'
+    fontWeight: '600',
+    color: '#059669'
   },
   controls: {
     marginBottom: 32

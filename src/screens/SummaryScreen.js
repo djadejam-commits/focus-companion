@@ -1,6 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 import { useSession } from '../context/SessionContext';
 import { getSessionType } from '../constants/sessionTypes';
 import { getSummaryMessage } from '../constants/messages';
@@ -22,6 +23,63 @@ const SummaryScreen = ({ navigation }) => {
     stats.distractionCount,
     stats.actualDuration / 60
   );
+
+  // Celebration animations
+  const scaleAnim = useRef(new Animated.Value(0.5)).current;
+  const rotateAnim = useRef(new Animated.Value(0)).current;
+  const bounceAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (stats.completed) {
+      // Celebration sequence
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
+      Animated.parallel([
+        // Icon bounce and scale
+        Animated.spring(scaleAnim, {
+          toValue: 1,
+          friction: 4,
+          tension: 40,
+          useNativeDriver: true
+        }),
+        // Gentle rotation
+        Animated.sequence([
+          Animated.timing(rotateAnim, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true
+          }),
+          Animated.timing(rotateAnim, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true
+          })
+        ])
+      ]).start();
+
+      // Bounce animation loop for icon
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(bounceAnim, {
+            toValue: 10,
+            duration: 600,
+            useNativeDriver: true
+          }),
+          Animated.timing(bounceAnim, {
+            toValue: 0,
+            duration: 600,
+            useNativeDriver: true
+          })
+        ])
+      ).start();
+    } else {
+      // Simple fade in for ended session
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        useNativeDriver: true
+      }).start();
+    }
+  }, []);
 
   const handleSave = async () => {
     try {
@@ -49,11 +107,26 @@ const SummaryScreen = ({ navigation }) => {
     navigation.navigate('Dashboard');
   };
 
+  const spin = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg']
+  });
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        {/* Icon */}
-        <Text style={styles.icon}>{stats.completed ? '🎯' : '⏸️'}</Text>
+        {/* Animated Icon */}
+        <Animated.View
+          style={{
+            transform: [
+              { scale: scaleAnim },
+              { rotate: spin },
+              { translateY: bounceAnim }
+            ]
+          }}
+        >
+          <Text style={styles.icon}>{stats.completed ? '🎯' : '⏸️'}</Text>
+        </Animated.View>
 
         {/* Title */}
         <Text style={styles.title}>

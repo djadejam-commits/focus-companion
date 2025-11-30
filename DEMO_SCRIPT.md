@@ -17,17 +17,21 @@
 "Focus Companion uses Edge Impulse's on-device machine learning to detect these pickups in real-time."
 
 1. **Tap "Deep Work" session** (45 min)
+   - **NOTE**: Session cards fade in with staggered animation + haptic feedback
+
 2. **Show active session screen**
-   - "Timer starts, motion detection is active"
-   - Point to "Detection active" indicator
+   - "Timer starts with a beautiful circular progress ring" ✨ NEW
+   - Point to **pulsing green "🤖 AI Detection Active" badge** ✨ NEW
+   - "Notice the live progress percentage updating in real-time"
 
 3. **Place phone face-down on table**
    - "Phone on desk, studying..."
 
 4. **Pick up phone**
+   - **Red flash appears + haptic vibration** ✨ NEW
    - **Refocus screen appears!**
    - "Immediately, the app detects the pickup gesture"
-   - "Gentle 3-second breathing reminder to refocus"
+   - "Gentle 3-second breathing reminder with calming animations"
    - "Timer paused, distraction counted"
 
 5. **Auto-resume after 3 seconds**
@@ -36,9 +40,15 @@
 
 6. **End session early (for demo)**
    - Tap X → End Session
-   - **Show Summary**
+   - **Show Summary with celebration animation** ✨ NEW
+   - "Success haptic feedback + bouncing trophy icon"
    - "Focus score calculated based on distractions"
+   - "Beautiful statistics presentation"
    - "All data stays on-device - privacy-first"
+
+7. **Return to Dashboard**
+   - "Enhanced stats showing Today/Week/Average/Total sessions" ✨ NEW
+   - "Professional, polished interface throughout"
 
 ### Edge Impulse Integration (20 seconds)
 **Switch to Edge Impulse Studio (web browser):**

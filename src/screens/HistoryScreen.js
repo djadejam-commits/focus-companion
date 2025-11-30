@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 import StorageService from '../services/StorageService';
 import { getSessionType } from '../constants/sessionTypes';
 import { formatDate, formatTime, formatTimeOfDay, calculateFocusScore } from '../utils/formatTime';
@@ -9,9 +10,31 @@ const HistoryScreen = ({ navigation }) => {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const bounceAnim = useRef(new Animated.Value(0.8)).current;
+
   useEffect(() => {
     loadSessions();
   }, []);
+
+  // Fade in animation for empty state
+  useEffect(() => {
+    if (!loading && sessions.length === 0) {
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true
+        }),
+        Animated.spring(bounceAnim, {
+          toValue: 1,
+          friction: 8,
+          tension: 40,
+          useNativeDriver: true
+        })
+      ]).start();
+    }
+  }, [loading, sessions.length]);
 
   const loadSessions = async () => {
     try {
@@ -62,19 +85,37 @@ const HistoryScreen = ({ navigation }) => {
   };
 
   const renderEmptyState = () => (
-    <View style={styles.emptyState}>
-      <Text style={styles.emptyIcon}>📊</Text>
+    <Animated.View
+      style={[
+        styles.emptyState,
+        {
+          opacity: fadeAnim,
+          transform: [{ scale: bounceAnim }]
+        }
+      ]}
+    >
+      <View style={styles.emptyIconContainer}>
+        <Text style={styles.emptyIcon}>📊</Text>
+      </View>
       <Text style={styles.emptyTitle}>No Sessions Yet</Text>
       <Text style={styles.emptyText}>
-        Complete your first focus session to see your history here.
+        Complete your first focus session to see your history and track your progress!
       </Text>
+      <View style={styles.emptyFeatures}>
+        <Text style={styles.emptyFeature}>✓ Track your focus sessions</Text>
+        <Text style={styles.emptyFeature}>✓ Monitor distraction patterns</Text>
+        <Text style={styles.emptyFeature}>✓ Improve over time</Text>
+      </View>
       <TouchableOpacity
         style={styles.startButton}
-        onPress={() => navigation.navigate('Dashboard')}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          navigation.navigate('Dashboard');
+        }}
       >
-        <Text style={styles.startButtonText}>Start a Session</Text>
+        <Text style={styles.startButtonText}>Start Your First Session</Text>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 
   return (
@@ -88,7 +129,8 @@ const HistoryScreen = ({ navigation }) => {
 
       {loading ? (
         <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading...</Text>
+          <Text style={styles.loadingIcon}>⏳</Text>
+          <Text style={styles.loadingText}>Loading your sessions...</Text>
         </View>
       ) : (
         <FlatList
@@ -141,6 +183,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  loadingIcon: {
+    fontSize: 48,
+    marginBottom: 16
   },
   loadingText: {
     fontSize: 16,
@@ -220,30 +266,54 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 32,
-    marginTop: 64
+    marginTop: 32
+  },
+  emptyIconContainer: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24
   },
   emptyIcon: {
-    fontSize: 72,
-    marginBottom: 16
+    fontSize: 64
   },
   emptyTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#111827',
-    marginBottom: 8
+    marginBottom: 12
   },
   emptyText: {
     fontSize: 16,
     color: '#6B7280',
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: 24
+    marginBottom: 24,
+    paddingHorizontal: 16
+  },
+  emptyFeatures: {
+    marginBottom: 32,
+    alignItems: 'flex-start'
+  },
+  emptyFeature: {
+    fontSize: 14,
+    color: '#059669',
+    marginVertical: 4,
+    fontWeight: '500'
   },
   startButton: {
     backgroundColor: '#6366F1',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    shadowColor: '#6366F1',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6
   },
   startButtonText: {
     color: '#FFFFFF',
