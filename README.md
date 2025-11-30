@@ -328,9 +328,9 @@ The codebase includes commented integration points for the Edge Impulse WASM mod
 
 ### Submission Assets
 
-- **GitHub Repository**: [Link to be added]
-- **Demo Video**: [Link to be added]
-- **Edge Impulse Project**: [Link to be added - set to public]
+- **GitHub Repository**: https://github.com/djadejam-commits/focus-companion
+- **Demo Video**: https://youtu.be/yK8pSpx8uO4
+- **Edge Impulse Project**: https://studio.edgeimpulse.com/public/840291/live
 - **Documentation**: This README + in-code docs
 
 ---
